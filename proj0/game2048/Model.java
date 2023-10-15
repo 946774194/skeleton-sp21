@@ -118,22 +118,21 @@ public class Model extends Observable {
         for(int c = 0;c<4;++c){
             boolean[] isMerged = new boolean[]{false,false,false,false};
             int[] current = new int[]{0,0,0,0};
-            for(int i = 0;i<4;++i)current[i]=board.tile(c,i)==null?0:board.tile(c,i).value();
+            for(int i = 0;i<4;++i)current[i]=board.tile(c,i)==null?0:board.tile(c,i).value(); // copy null?0:value
 
             for(int lineToMove = 2;lineToMove>=0;--lineToMove){
                 if(current[lineToMove]==0)continue;
-                int des = lineToMove;
-                for(int i =lineToMove+1;i<4;++i){
+                int des = lineToMove; // try to find a destination
+                for(int i = lineToMove+1;i<4;++i){
                     if(current[i]==0){
-                        des=i;continue;
-                    }else if(!isMerged[i]&&current[i]==current[lineToMove]){
-                        des=i;continue;
+                        des = i;continue; // is empty
+                    }else if(!isMerged[i] && current[i]==current[lineToMove]){
+                        des = i;continue; // is equivalent and haven't been merged
                     }
-                    if(isMerged[i] || current[i]!=current[lineToMove])break;
+                    if(isMerged[i] || current[i]!=current[lineToMove])break; // have been merged or isn't equivalent
                 }
-                if(des != lineToMove){
+                if(des != lineToMove){ // a destination is found
                     isMerged[des] = board.move(c,des,board.tile(c,lineToMove));
-
                     changed = true;
                     current[des] += current[lineToMove];
                     current[lineToMove] = 0;
