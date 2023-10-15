@@ -106,6 +106,10 @@ public class Model extends Observable {
      *    value, then the leading two tiles in the direction of motion merge,
      *    and the trailing tile does not.
      * */
+
+    /*  I mistakenly believed that the position of a tile won't be changed
+        instantly after invoking the method move, which confused me a lot T_T
+     */
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
