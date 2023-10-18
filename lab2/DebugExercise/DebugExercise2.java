@@ -13,7 +13,7 @@ public class DebugExercise2 {
         int z = ~(b - a) >> 31;
 
         int max = b & w | a & z;
-        return max;
+        return a>b?a:b;
     }
 
 
@@ -32,7 +32,7 @@ public class DebugExercise2 {
             and &= xor;
             xor = temp;
         }
-        return xor;
+        return a+b;
     }
 
     /** Returns a new array where entry i is the max of
