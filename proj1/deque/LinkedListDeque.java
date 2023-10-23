@@ -156,7 +156,7 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
     private class LinkedListDequeIterator implements Iterator<T> {
         Node<T> nodeIterator;
 
-        public LinkedListDequeIterator() {
+        LinkedListDequeIterator() {
             nodeIterator = sentinel;
         }
 
