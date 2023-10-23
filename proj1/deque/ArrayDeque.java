@@ -63,6 +63,9 @@ public class ArrayDeque<T> implements ArrayDequeInterface<T> {
     }
 
     public T removeLast() {
+        if (size == 0) {
+            return null;
+        }
         T res = items[size - 1];
         items[--size] = null;
         if (capacity >= 16 && size < capacity / 4) {
