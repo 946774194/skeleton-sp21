@@ -3,25 +3,25 @@ package deque;
 import java.util.Iterator;
 
 interface ArrayDequeInterface<T> extends Iterable<T> {
-    public void addFirst(T item);
+    void addFirst(T item);
 
-    public void addLast(T item);
+    void addLast(T item);
 
-    public boolean isEmpty();
+    boolean isEmpty();
 
-    public int size();
+    int size();
 
-    public void printDeque();
+    void printDeque();
 
-    public T removeFirst();
+    T removeFirst();
 
-    public T removeLast();
+    T removeLast();
 
-    public T get(int index);
+    T get(int index);
 
-    public Iterator<T> iterator();
+    Iterator<T> iterator();
 
-    public boolean equals(Object o);
+    boolean equals(Object o);
 }
 
 public class ArrayDeque<T> implements ArrayDequeInterface<T> {
@@ -44,7 +44,9 @@ public class ArrayDeque<T> implements ArrayDequeInterface<T> {
     }
 
     public T get(int index) {
-        if (index < 0 || index >= size) return null;
+        if (index < 0 || index >= size) {
+            return null;
+        }
         return items[index];
     }
 
@@ -85,7 +87,9 @@ public class ArrayDeque<T> implements ArrayDequeInterface<T> {
     }
 
     public T removeFirst() {
-        if (size == 0) return null;
+        if (size == 0) {
+            return null;
+        }
         T res = items[0];
         T[] a = (T[]) new Object[capacity];
         System.arraycopy(items, 1, a, 0, --size);
@@ -98,8 +102,12 @@ public class ArrayDeque<T> implements ArrayDequeInterface<T> {
 
     public void printDeque() {
         StringBuilder sb = new StringBuilder();
-        for (T i : this) sb.append(i).append(' ');
-        if (!sb.isEmpty()) sb.deleteCharAt(sb.length() - 1);
+        for (T i : this) {
+            sb.append(i).append(' ');
+        }
+        if (!sb.isEmpty()) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
         System.out.println(sb.toString());
     }
 

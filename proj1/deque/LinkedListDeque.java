@@ -4,25 +4,25 @@ package deque;
 import java.util.Iterator;
 
 interface LinkedListDequeInterface<T> extends Iterable<T> {
-    public void addFirst(T item);
+    void addFirst(T item);
 
-    public void addLast(T item);
+    void addLast(T item);
 
-    public boolean isEmpty();
+    boolean isEmpty();
 
-    public int size();
+    int size();
 
-    public void printDeque();
+    void printDeque();
 
-    public T removeFirst();
+    T removeFirst();
 
-    public T removeLast();
+    T removeLast();
 
-    public T get(int index);
+    T get(int index);
 
-    public Iterator<T> iterator();
+    Iterator<T> iterator();
 
-    public boolean equals(Object o);
+    boolean equals(Object o);
 }
 
 public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
@@ -39,7 +39,7 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
     }
 
     private int size;
-    private final Node<T> sentinel = new Node<T>(null, null, null);
+    private final Node<T> sentinel = new Node<>(null, null, null);
 
     public LinkedListDeque() {
         sentinel.previous = sentinel.next = sentinel;
@@ -55,10 +55,16 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
     }
 
     public boolean equals(Object o) {
-        if (o == null) return false;
-        if (o == this) return true;
+        if (o == null) {
+            return false;
+        }
+        if (o == this) {
+            return true;
+        }
 
-        if (!(o instanceof LinkedListDeque)) return false;
+        if (!(o instanceof LinkedListDeque)) {
+            return false;
+        }
         LinkedListDeque<?> lld = (LinkedListDeque<?>) o;
         if (lld.size() != size) {
             return false;
@@ -72,14 +78,14 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
     }
 
     public void addFirst(T item) {
-        Node<T> tmp = new Node<T>(item, sentinel.next, sentinel);
+        Node<T> tmp = new Node<>(item, sentinel.next, sentinel);
         tmp.next.previous = tmp;
         tmp.previous.next = tmp;
         size++;
     }
 
     public void addLast(T item) {
-        Node<T> tmp = new Node<T>(item, sentinel, sentinel.previous);
+        Node<T> tmp = new Node<>(item, sentinel, sentinel.previous);
         tmp.next.previous = tmp;
         tmp.previous.next = tmp;
         size++;
@@ -89,12 +95,10 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
         if (size == 0) {
             return null;
         }
-        Node<T> tmp = sentinel.next;
-        T retItem = tmp.item;
-        sentinel.next = tmp.next;
-        tmp.next.previous = tmp.previous;
+        T retItem = sentinel.next.item;
+        sentinel.next = sentinel.next.next;
+        sentinel.next.next.previous = sentinel.next.previous;
         size--;
-        tmp = null;
         return retItem;
     }
 
@@ -102,12 +106,10 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
         if (size == 0) {
             return null;
         }
-        Node<T> tmp = sentinel.previous;
-        T retItem = tmp.item;
-        sentinel.previous = tmp.previous;
-        tmp.previous.next = tmp.next;
+        T retItem = sentinel.previous.item;
+        sentinel.previous = sentinel.previous.previous;
+        sentinel.previous.previous.next = sentinel.previous.next;
         size--;
-        tmp = null;
         return retItem;
     }
 
@@ -125,21 +127,25 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
     }
 
     public void printDeque() {
-//        if(size == 0){
-//            return;
-//        }
-//        Node<T> i = sentinel.next;
-//        if (i != sentinel){
-//            System.out.printf(i.item.toString());
-//            i = i.next;
-//        }
-//        while (i != sentinel){
-//            System.out.printf(" " + i.item.toString());
-//            i = i.next;
-//        }
+/*        if(size == 0){
+            return;
+        }
+        Node<T> i = sentinel.next;
+        if (i != sentinel){
+            System.out.printf(i.item.toString());
+            i = i.next;
+        }
+        while (i != sentinel){
+            System.out.printf(" " + i.item.toString());
+            i = i.next;
+        }*/
         StringBuilder sb = new StringBuilder();
-        for(T i : this)sb.append(i).append(' ');
-        if(!sb.isEmpty()) sb.deleteCharAt(sb.length()-1);
+        for (T i : this) {
+            sb.append(i).append(' ');
+        }
+        if (!sb.isEmpty()) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
         System.out.println(sb.toString());
     }
 
