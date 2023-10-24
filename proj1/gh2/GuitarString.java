@@ -55,7 +55,7 @@ public class GuitarString {
         //       the average of the two multiplied by the DECAY factor.
         //       **Do not call StdAudio.play().**
         double d = buffer.removeFirst();
-        buffer.addLast((d + buffer.get(0) / 2 * DECAY));
+        buffer.addLast((d + buffer.get(0)) / 2 * DECAY);
     }
 
     /* Return the double at the front of the buffer. */

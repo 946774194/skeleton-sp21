@@ -27,9 +27,31 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         return items[nextFirst + 1 + index];
     }
 
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Deque<?>)) {
+            return false;
+        }
+        Deque<?> ad = (Deque<?>) o;
+        if (ad.size() != size) {
+            return false;
+        }
+        for (int i = 0; i < size; i++) {
+            if (!ad.get(i).equals(get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //wonder if I can balance the array
     //(F+L-C)/2 > C/6
-    public void checkResize() {
+    private void checkResize() {
         if (nextFirst == -1 || nextLast == capacity) {
             resize(capacity * 2);
         } else if (capacity >= 16 && size < capacity / 4) {
@@ -42,7 +64,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         }
     }
 
-    public void resize(int newCapacity) {
+    private void resize(int newCapacity) {
         @SuppressWarnings("unchecked")
         T[] newItems = (T[]) new Object[newCapacity];
         System.arraycopy(items, nextFirst + 1, newItems, (newCapacity - size) / 2, size);
