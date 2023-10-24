@@ -94,9 +94,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public T get(int index) {
-        if (index > size - 1) {
-            System.out.println("out of bound");
-
+        if (index >= size || index < 0) {
             return null;
         }
         Node<T> i = sentinel.next;
@@ -104,6 +102,10 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             i = i.next;
         }
         return i.item;
+    }
+
+    public T getRecursive(int index) {
+        return get(index);
     }
 
     @Override
