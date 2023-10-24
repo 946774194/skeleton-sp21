@@ -28,7 +28,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return size;
     }
 
-    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;
@@ -36,11 +35,10 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         if (o == this) {
             return true;
         }
-
         if (!(o instanceof LinkedListDeque)) {
             return false;
         }
-        LinkedListDeque<?> lld = (LinkedListDeque<?>) o;
+        @SuppressWarnings("unchecked") LinkedListDeque<T> lld = (LinkedListDeque<T>) o;
         if (lld.size() != size) {
             return false;
         }
