@@ -2,29 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-interface ArrayDequeInterface<T> extends Iterable<T> {
-    void addFirst(T item);
-
-    void addLast(T item);
-
-    boolean isEmpty();
-
-    int size();
-
-    void printDeque();
-
-    T removeFirst();
-
-    T removeLast();
-
-    T get(int index);
-
-    Iterator<T> iterator();
-
-    boolean equals(Object o);
-}
-
-public class ArrayDeque<T> implements ArrayDequeInterface<T> {
+public class ArrayDeque<T> implements Deque<T> {
     private int size;
     private int capacity;
     private T[] items;
@@ -35,14 +13,12 @@ public class ArrayDeque<T> implements ArrayDequeInterface<T> {
         capacity = 8;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
+    @Override
     public T get(int index) {
         if (index < 0 || index >= size) {
             return null;
@@ -57,6 +33,7 @@ public class ArrayDeque<T> implements ArrayDequeInterface<T> {
         capacity = newCapacity;
     }
 
+    @Override
     public void addLast(T item) {
         if (size == capacity) {
             resize(capacity * 2);
@@ -64,6 +41,7 @@ public class ArrayDeque<T> implements ArrayDequeInterface<T> {
         items[size++] = item;
     }
 
+    @Override
     public T removeLast() {
         if (size == 0) {
             return null;
@@ -76,6 +54,7 @@ public class ArrayDeque<T> implements ArrayDequeInterface<T> {
         return res;
     }
 
+    @Override
     public void addFirst(T item) {
         if (size == capacity) {
             resize(capacity * 2);
@@ -86,6 +65,7 @@ public class ArrayDeque<T> implements ArrayDequeInterface<T> {
         items = a;
     }
 
+    @Override
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -100,6 +80,7 @@ public class ArrayDeque<T> implements ArrayDequeInterface<T> {
         return res;
     }
 
+    @Override
     public void printDeque() {
         StringBuilder sb = new StringBuilder();
         for (T i : this) {

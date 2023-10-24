@@ -1,31 +1,8 @@
 package deque;
 
-
 import java.util.Iterator;
 
-interface LinkedListDequeInterface<T> extends Iterable<T> {
-    void addFirst(T item);
-
-    void addLast(T item);
-
-    boolean isEmpty();
-
-    int size();
-
-    void printDeque();
-
-    T removeFirst();
-
-    T removeLast();
-
-    T get(int index);
-
-    Iterator<T> iterator();
-
-    boolean equals(Object o);
-}
-
-public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
+public class LinkedListDeque<T> implements Deque<T> {
     private static class Node<T> {
         private final T item;
         private Node<T> next;
@@ -46,14 +23,12 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
         size = 0;
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;
@@ -77,6 +52,7 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
         return true;
     }
 
+    @Override
     public void addFirst(T item) {
         Node<T> tmp = new Node<>(item, sentinel.next, sentinel);
         tmp.next.previous = tmp;
@@ -84,6 +60,7 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
         size++;
     }
 
+    @Override
     public void addLast(T item) {
         Node<T> tmp = new Node<>(item, sentinel, sentinel.previous);
         tmp.next.previous = tmp;
@@ -91,6 +68,7 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
         size++;
     }
 
+    @Override
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -102,6 +80,7 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
         return retItem;
     }
 
+    @Override
     public T removeLast() {
         if (size == 0) {
             return null;
@@ -113,6 +92,7 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
         return retItem;
     }
 
+    @Override
     public T get(int index) {
         if (index > size - 1) {
             System.out.println("out of bound");
@@ -126,19 +106,8 @@ public class LinkedListDeque<T> implements LinkedListDequeInterface<T> {
         return i.item;
     }
 
+    @Override
     public void printDeque() {
-/*        if(size == 0){
-            return;
-        }
-        Node<T> i = sentinel.next;
-        if (i != sentinel){
-            System.out.printf(i.item.toString());
-            i = i.next;
-        }
-        while (i != sentinel){
-            System.out.printf(" " + i.item.toString());
-            i = i.next;
-        }*/
         StringBuilder sb = new StringBuilder();
         for (T i : this) {
             sb.append(i).append(' ');
