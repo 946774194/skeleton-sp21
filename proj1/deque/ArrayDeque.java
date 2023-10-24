@@ -1,14 +1,13 @@
 package deque;
 
 import java.util.Iterator;
-import java.math.*;
 
 public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private int size, capacity, nextFirst, nextLast;
     @SuppressWarnings("unchecked")
     private T[] items = (T[]) new Object[8];
 
-    ArrayDeque() {
+    public ArrayDeque() {
         size = 0;
         capacity = 8;
         nextLast = capacity / 2;
@@ -35,7 +34,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             resize(capacity * 2);
         } else if (capacity >= 16 && size < capacity / 4) {
             resize(capacity / 4);
-        } else if (size >= 16) {
+        } else if (size >= 64) {
             double d = Math.abs(nextFirst + nextLast - capacity) * 3;
             if (d > (double) capacity) {
                 resize(capacity);
@@ -107,7 +106,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         return new ArrayDequeIterator();
     }
 
-    private class ArrayDequeIterator implements Iterator<T> {
+    public class ArrayDequeIterator implements Iterator<T> {
         private int iteratorIndex;
 
         ArrayDequeIterator() {

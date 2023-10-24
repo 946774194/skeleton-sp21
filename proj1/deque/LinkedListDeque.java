@@ -122,7 +122,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return new LinkedListDequeIterator();
     }
 
-    private class LinkedListDequeIterator implements Iterator<T> {
+    public class LinkedListDequeIterator implements Iterator<T> {
         Node<T> nodeIterator;
 
         LinkedListDequeIterator() {
