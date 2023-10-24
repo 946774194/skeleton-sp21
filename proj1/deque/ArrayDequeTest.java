@@ -1,12 +1,12 @@
 package deque;
+
 import org.junit.Assert.*;
 import org.junit.Test;
 
 
-
 public class ArrayDequeTest {
     @Test
-    public void simplyAddTest(){
+    public void simplyAddTest() {
         ArrayDeque<Integer> deque = new ArrayDeque<>();
         for (int i = 0; i < 100; i++) {
             deque.addFirst(i);
@@ -16,8 +16,9 @@ public class ArrayDequeTest {
         }
         deque.printDeque();
     }
+
     @Test
-    public void simplyAddAndRemoveLastTest(){
+    public void simplyAddAndRemoveLastTest() {
         ArrayDeque<Integer> deque = new ArrayDeque<>();
         for (int i = 0; i < 100; i++) {
             deque.addLast(i);

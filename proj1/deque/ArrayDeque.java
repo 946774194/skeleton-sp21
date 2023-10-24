@@ -2,13 +2,13 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private int size;
     private int capacity;
-    private T[] items;
+    @SuppressWarnings("unchecked")
+    private T[] items = (T[]) new Object[8];
 
     public ArrayDeque() {
-        items = (T[]) new Object[8];
         size = 0;
         capacity = 8;
     }
@@ -27,6 +27,7 @@ public class ArrayDeque<T> implements Deque<T> {
     }
 
     private void resize(int newCapacity) {
+        @SuppressWarnings("unchecked")
         T[] a = (T[]) new Object[newCapacity];
         System.arraycopy(items, 0, a, 0, size);
         items = a;
@@ -59,6 +60,7 @@ public class ArrayDeque<T> implements Deque<T> {
         if (size == capacity) {
             resize(capacity * 2);
         }
+        @SuppressWarnings("unchecked")
         T[] a = (T[]) new Object[capacity];
         System.arraycopy(items, 0, a, 1, size++);
         a[0] = item;
@@ -71,6 +73,7 @@ public class ArrayDeque<T> implements Deque<T> {
             return null;
         }
         T res = items[0];
+        @SuppressWarnings("unchecked")
         T[] a = (T[]) new Object[capacity];
         System.arraycopy(items, 1, a, 0, --size);
         items = a;
