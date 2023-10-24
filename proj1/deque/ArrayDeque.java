@@ -54,7 +54,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private void checkResize() {
         if (nextFirst == -1 || nextLast == capacity) {
             resize(capacity * 2);
-        } else if (capacity >= 16 && size < capacity / 4) {
+        } else if (capacity > 16 && size < capacity / 4) {
             resize(capacity / 4);
         } else if (size >= 64) {
             double d = Math.abs(nextFirst + nextLast - capacity) * 3;
