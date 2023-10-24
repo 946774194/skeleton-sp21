@@ -2,7 +2,6 @@ package gh2;
 
 import deque.Deque;
 import deque.LinkedListDeque;
-// TODO: maybe more imports
 
 //Note: This file will not compile until you complete the Deque implementations
 public class GuitarString {
