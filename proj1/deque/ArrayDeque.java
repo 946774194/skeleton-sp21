@@ -18,7 +18,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         return size;
     }
 
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (o == null) {
             return false;
         }
@@ -34,12 +34,13 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             return false;
         }
         for (int i = 0; i < size; i++) {
-            if (ad.get(i) != get(i)) {
+            if (!ad.get(i).equals(get(i))) {
                 return false;
             }
         }
         return true;
     }
+
     @Override
     public T get(int index) {
         if (index < 0 || index >= size) {
@@ -79,11 +80,12 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public void addFirst(T item) {
+        T[] a;
         if (size == capacity) {
-            resize(capacity * 2);
+            a = (T[]) new Object[capacity * 2];
+        } else {
+            a = (T[]) new Object[capacity];
         }
-        @SuppressWarnings("unchecked")
-        T[] a = (T[]) new Object[capacity];
         System.arraycopy(items, 0, a, 1, size++);
         a[0] = item;
         items = a;
@@ -95,13 +97,16 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             return null;
         }
         T res = items[0];
-        @SuppressWarnings("unchecked")
-        T[] a = (T[]) new Object[capacity];
+        T[] a;
+
+        if (capacity >= 16 && size - 1 < capacity / 4) {
+            a = (T[]) new Object[capacity / 4];
+        } else {
+            a = (T[]) new Object[capacity];
+        }
         System.arraycopy(items, 1, a, 0, --size);
         items = a;
-        if (capacity >= 16 && size < capacity / 4) {
-            resize(capacity / 4);
-        }
+
         return res;
     }
 
@@ -121,7 +126,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         return new ArrayDequeIterator();
     }
 
-    public class ArrayDequeIterator implements Iterator<T> {
+    private class ArrayDequeIterator implements Iterator<T> {
         private int iteratorIndex;
 
         ArrayDequeIterator() {
@@ -136,5 +141,4 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             return items[iteratorIndex++];
         }
     }
-
 }
