@@ -1,16 +1,18 @@
 package deque;
 
 import java.util.Iterator;
+import java.math.*;
 
 public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
-    private int size;
-    private int capacity;
+    private int size, capacity, nextFirst, nextLast;
     @SuppressWarnings("unchecked")
     private T[] items = (T[]) new Object[8];
 
-    public ArrayDeque() {
+    ArrayDeque() {
         size = 0;
         capacity = 8;
+        nextLast = capacity / 2;
+        nextFirst = capacity / 2 - 1;
     }
 
     @Override
@@ -18,77 +20,51 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         return size;
     }
 
-    public boolean equals(Object o) {
-        if (o == null) {
-            return false;
-        }
-        if (o == this) {
-            return true;
-        }
-        if (!(o instanceof ArrayDeque)) {
-            return false;
-        }
-        @SuppressWarnings("unchecked")
-        ArrayDeque<T> ad = (ArrayDeque<T>) o;
-        if (ad.size() != size) {
-            return false;
-        }
-        for (int i = 0; i < size; i++) {
-            if (!ad.get(i).equals(get(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     @Override
     public T get(int index) {
-        if (index < 0 || index >= size) {
+        if (isEmpty() || index >= size || index < 0) {
             return null;
         }
-        return items[index];
+        return items[nextFirst + 1 + index];
     }
 
-    private void resize(int newCapacity) {
-        @SuppressWarnings("unchecked")
-        T[] a = (T[]) new Object[newCapacity];
-        System.arraycopy(items, 0, a, 0, size);
-        items = a;
-        capacity = newCapacity;
-    }
-
-    @Override
-    public void addLast(T item) {
-        if (size == capacity) {
+    //wonder if I can balance the array
+    //(F+L-C)/2 > C/6
+    public void checkResize() {
+        if (nextFirst == -1 || nextLast == capacity) {
             resize(capacity * 2);
+        } else if (capacity >= 16 && size < capacity / 4) {
+            resize(capacity / 4);
+        } else if (size >= 16) {
+            double d = Math.abs(nextFirst + nextLast - capacity) * 3;
+            if (d > (double) capacity) {
+                resize(capacity);
+            }
         }
-        items[size++] = item;
     }
 
-    @Override
-    public T removeLast() {
-        if (size == 0) {
-            return null;
-        }
-        T res = items[size - 1];
-        items[--size] = null;
-        if (capacity >= 16 && size < capacity / 4) {
-            resize(capacity / 4);
-        }
-        return res;
+    public void resize(int newCapacity) {
+        @SuppressWarnings("unchecked")
+        T[] newItems = (T[]) new Object[newCapacity];
+        System.arraycopy(items, nextFirst + 1, newItems, (newCapacity - size) / 2, size);
+        nextFirst = (newCapacity - size) / 2 - 1;
+        nextLast = (newCapacity - size) / 2 + size;
+        capacity = newCapacity;
+        items = newItems;
     }
 
     @Override
     public void addFirst(T item) {
-        T[] a;
-        if (size == capacity) {
-            a = (T[]) new Object[capacity * 2];
-        } else {
-            a = (T[]) new Object[capacity];
-        }
-        System.arraycopy(items, 0, a, 1, size++);
-        a[0] = item;
-        items = a;
+        checkResize();
+        items[nextFirst--] = item;
+        size++;
+    }
+
+    @Override
+    public void addLast(T item) {
+        checkResize();
+        items[nextLast++] = item;
+        size++;
     }
 
     @Override
@@ -96,18 +72,23 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (size == 0) {
             return null;
         }
-        T res = items[0];
-        T[] a;
+        T retItem = get(0);
+        items[++nextFirst] = null;
+        size--;
+        checkResize();
+        return retItem;
+    }
 
-        if (capacity >= 16 && size - 1 < capacity / 4) {
-            a = (T[]) new Object[capacity / 4];
-        } else {
-            a = (T[]) new Object[capacity];
+    @Override
+    public T removeLast() {
+        if (size == 0) {
+            return null;
         }
-        System.arraycopy(items, 1, a, 0, --size);
-        items = a;
-
-        return res;
+        T retItem = get(size - 1);
+        items[--nextLast] = null;
+        size--;
+        checkResize();
+        return retItem;
     }
 
     @Override
@@ -130,11 +111,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         private int iteratorIndex;
 
         ArrayDequeIterator() {
-            iteratorIndex = 0;
+            iteratorIndex = nextFirst + 1;
         }
 
         public boolean hasNext() {
-            return iteratorIndex < size;
+            return iteratorIndex < nextLast;
         }
 
         public T next() {

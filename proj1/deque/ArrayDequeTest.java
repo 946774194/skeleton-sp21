@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class ArrayDequeTest {
     @Test
-    public void simplyAddTest() {
+    public void simplyAddAndRemoveFirstTest() {
         ArrayDeque<Integer> deque = new ArrayDeque<>();
         for (int i = 0; i < 100; i++) {
             deque.addFirst(i);
@@ -25,6 +25,19 @@ public class ArrayDequeTest {
         }
         for (int i = 0; i < 100; i++) {
             deque.removeLast();
+        }
+    }
+
+    @Test
+    public void balanceTest() {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        for (int i = 0; i < 10000; i += 2) {
+            deque.addLast(i);
+            deque.addLast(i + 1);
+            deque.removeFirst();
+        }
+        for (int i = 0; i < 32; i++) {
+            deque.removeFirst();
         }
     }
 }

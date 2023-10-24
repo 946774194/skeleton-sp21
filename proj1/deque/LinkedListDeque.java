@@ -38,7 +38,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         if (!(o instanceof LinkedListDeque)) {
             return false;
         }
-        @SuppressWarnings("unchecked") LinkedListDeque<T> lld = (LinkedListDeque<T>) o;
+        Deque<?> lld = (Deque<?>) o;
         if (lld.size() != size) {
             return false;
         }
@@ -92,7 +92,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public T get(int index) {
-        if (index >= size || index < 0) {
+        if (isEmpty() || index >= size || index < 0) {
             return null;
         }
         Node<T> i = sentinel.next;
