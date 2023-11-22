@@ -1,26 +1,73 @@
 package gitlet;
 
-// TODO: any imports you need here
+import java.io.Serializable;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.Date; // TODO: You'll likely use this in this class
+import static gitlet.Utils.*;
+
 
 /** Represents a gitlet commit object.
- *  TODO: It's a good idea to give a description here of what else this Class
  *  does at a high level.
  *
- *  @author TODO
+ *  @author me
  */
-public class Commit {
-    /**
-     * TODO: add instance variables here.
-     *
-     * List all instance variables of the Commit class here with a useful
-     * comment above them describing what that variable represents and how that
-     * variable is used. We've provided one example for `message`.
-     */
+public class Commit implements Serializable {
+    final long timestamp;
+    final String msg;
+    final String parent;
+    final String secondParent;
+    private final String sha1;
+    Map<String, String> map = new HashMap<>();
 
-    /** The message of this Commit. */
-    private String message;
+    Commit(long timestamp, String msg, String parent){
+        this(timestamp, msg, parent, "");
+    }
 
-    /* TODO: fill in the rest of this class. */
+    Commit(long timestamp, String msg, String parent, String secondParent){
+        this.timestamp = timestamp;
+        this.msg = msg;
+        this.parent = parent;
+        this.secondParent = secondParent;
+        this.sha1 = sha1(Long.toString(timestamp), msg, parent, secondParent);
+    }
+
+    String getSha1(){ return sha1;}
+
+    Commit save(){
+        Main.log("saving commit:", sha1, timestamp, msg, parent, secondParent);
+        File dir = join(Capers.OBJECT_FOLDER, sha1.substring(0,2));
+        File file = creatDirAndFile(dir, sha1.substring(2));
+        writeObject(file, this);
+        return this;
+    }
+    Commit setMap(Map<String, String> map){
+        this.map = map;
+        return this;
+    }
+
+    private static File creatDirAndFile(File dir, String name){
+        File file = join(dir, name);
+        if(!dir.isDirectory()){
+            dir.mkdir();
+        }
+        if(!file.exists()){
+            try{
+                file.createNewFile();
+            }catch (Exception e){ }
+        }
+        return file;
+    }
+
+    public static Commit read(String sha1){
+        File file = join(Capers.OBJECT_FOLDER, sha1.substring(0,2), sha1.substring(2));
+        if(!file.exists()){
+            Main.exitWithMsg("commit not exist");
+        }
+        Commit c = readObject(file, Commit.class);
+        Main.log("reading commit:" + sha1, sha1.equals(c.sha1),
+                c.timestamp, c.msg, c.parent, c.secondParent);
+        return c;
+    }
 }
