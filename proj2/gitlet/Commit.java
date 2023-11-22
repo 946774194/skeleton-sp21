@@ -38,26 +38,17 @@ public class Commit implements Serializable {
     Commit save(){
         Main.log("saving commit:", sha1, timestamp, msg, parent, secondParent);
         File dir = join(Capers.OBJECT_FOLDER, sha1.substring(0,2));
-        File file = creatDirAndFile(dir, sha1.substring(2));
+        dir.mkdirs();
+        File file = join(dir, sha1.substring(2));
         writeObject(file, this);
+        for(String s: map.keySet()){
+
+        }
         return this;
     }
     Commit setMap(Map<String, String> map){
         this.map = map;
         return this;
-    }
-
-    private static File creatDirAndFile(File dir, String name){
-        File file = join(dir, name);
-        if(!dir.isDirectory()){
-            dir.mkdir();
-        }
-        if(!file.exists()){
-            try{
-                file.createNewFile();
-            }catch (Exception e){ }
-        }
-        return file;
     }
 
     public static Commit read(String sha1){

@@ -32,19 +32,14 @@ public class Main {
         int n = args.length;
         switch (cmd){
             case "init":
-                if(n != 1){
-                    exitWithMsg("Incorrect operands.");
-                }
+                if(n != 1){ exitWithMsg("Incorrect operands."); }
                 break;
             case "add":
-                if(n != 2){
-                    exitWithMsg("Incorrect operands.");
-                }
+                if(n != 2){ exitWithMsg("Incorrect operands."); }
                 break;
             case "commit":
-                if(n != 2){
-                    exitWithMsg("Incorrect operands.");
-                }
+                if(n == 1){ exitWithMsg("Please enter a commit message."); }
+                if(n != 2){ exitWithMsg("Incorrect operands."); }
             default:
                 exitWithMsg("No command with that name exists.");
         }

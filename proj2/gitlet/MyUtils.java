@@ -2,8 +2,7 @@ package gitlet;
 
 import java.io.File;
 
-import static gitlet.Utils.readContents;
-import static gitlet.Utils.sha1;
+import static gitlet.Utils.*;
 
 public class MyUtils {
     static long TS(){ return System.currentTimeMillis(); }
@@ -17,7 +16,11 @@ public class MyUtils {
         }
     }
 
-    public static String getSHA1OfFile(File file){
+    public static String getSHA1(File file){
         return sha1((Object) readContents(file));
+    }
+
+    public static String getSHA1(String name){
+        return sha1((Object) readContents(join(name)));
     }
 }

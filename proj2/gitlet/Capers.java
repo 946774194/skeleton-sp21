@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
 
 import static gitlet.Utils.*;
 import static gitlet.MyUtils.*;
@@ -37,20 +38,33 @@ public class Capers {
         }
 
         Set<String> s = Status.addList.get();
-        s.add(name);
-        Status.addList.write(s);
         Commit head = Commit.read(Status.HEAD.get());
         if(head.map.containsKey(name)){
-            if(head.map.get(name).equals(getSHA1OfFile(file))){
+            if(head.map.get(name).equals(getSHA1(file))){
                 Stage.delete(name);
+                if(s.remove(name))
+                    Status.addList.write(s);
                 return;
             }
         }
+        if(s.add(name))
+            Status.addList.write(s);
         Stage.copy(name);
     }
 
     public static void commit(String msg){
-        Commit head = Commit.read(Status.HEAD.get());
-        new Commit(TS(), msg, Status.HEAD.get()).setMap(null).save();
+        Set<String> addSet = Status.addList.get();
+        Set<String> removedSet = Status.removedList.get();
+        if(addSet.isEmpty() && removedSet.isEmpty()){
+            Main.exitWithMsg("No changes added to the commit.");
+        }
+        Map<String, String> map = Commit.read(Status.HEAD.get()).map;
+        for(String s:addSet){
+            map.put(s, getSHA1(s));
+        }
+        for (String s : removedSet){
+            map.remove(s);
+        }
+        new Commit(TS(), msg, Status.HEAD.get()).setMap(map).save();
     }
 }
