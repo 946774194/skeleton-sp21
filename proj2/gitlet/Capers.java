@@ -1,11 +1,7 @@
 package gitlet;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.Map;
+import java.util.*;
 
 import static gitlet.Utils.*;
 import static gitlet.MyUtils.*;
@@ -65,6 +61,9 @@ public class Capers {
         for (String s : removedSet){
             map.remove(s);
         }
-        new Commit(TS(), msg, Status.HEAD.get()).setMap(map).save();
+        String s = new Commit(TS(), msg, Status.HEAD.get()).setMap(map).save().getSha1();
+        Status.HEAD.write(s);
+        Status.addList.clean();
+        Status.removedList.clean();
     }
 }

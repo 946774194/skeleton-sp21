@@ -40,6 +40,7 @@ public class Main {
             case "commit":
                 if(n == 1){ exitWithMsg("Please enter a commit message."); }
                 if(n != 2){ exitWithMsg("Incorrect operands."); }
+                break;
             default:
                 exitWithMsg("No command with that name exists.");
         }

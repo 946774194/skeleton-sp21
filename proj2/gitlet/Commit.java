@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static gitlet.Utils.*;
+import static gitlet.Capers.OBJECT_FOLDER;
 
 
 /** Represents a gitlet commit object.
@@ -37,13 +38,11 @@ public class Commit implements Serializable {
 
     Commit save(){
         Main.log("saving commit:", sha1, timestamp, msg, parent, secondParent);
-        File dir = join(Capers.OBJECT_FOLDER, sha1.substring(0,2));
+        File dir = join(OBJECT_FOLDER, sha1.substring(0,2));
         dir.mkdirs();
         File file = join(dir, sha1.substring(2));
         writeObject(file, this);
-        for(String s: map.keySet()){
-
-        }
+        Stage.saveStage(sha1);
         return this;
     }
     Commit setMap(Map<String, String> map){
@@ -52,7 +51,7 @@ public class Commit implements Serializable {
     }
 
     public static Commit read(String sha1){
-        File file = join(Capers.OBJECT_FOLDER, sha1.substring(0,2), sha1.substring(2));
+        File file = join(OBJECT_FOLDER, sha1.substring(0,2), sha1.substring(2));
         if(!file.exists()){
             Main.exitWithMsg("commit not exist");
         }

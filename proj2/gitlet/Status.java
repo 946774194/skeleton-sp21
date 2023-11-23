@@ -13,6 +13,7 @@ public class Status {
     public interface StatusType<T>{
          T get();
          void write(T o);
+         void clean();
     }
 
     static class StatusTypeString implements StatusType<String>{
@@ -29,6 +30,9 @@ public class Status {
         public void write(String o){
             writeContents(join(STATUS_FOLDER, this.s), o);
         }
+
+        @Override
+        public void clean(){write("");}
     }
 
     static class StatusTypeList<T> implements StatusType<List<T>>{
@@ -45,6 +49,9 @@ public class Status {
         public void write(List<T> o){
             writeObject(join(STATUS_FOLDER, this.s), (ArrayList<T>) o);
         }
+
+        @Override
+        public void clean(){write(new ArrayList<>());}
     }
 
     static class StatusTypeSet<T> implements StatusType<Set<T>>{
@@ -54,20 +61,24 @@ public class Status {
         @Override
         @SuppressWarnings("unchecked")
         public Set<T> get(){
-            return (Set<T>) readObject(join(STATUS_FOLDER, this.s), ArrayList.class);
+            return (Set<T>) readObject(join(STATUS_FOLDER, this.s), TreeSet.class);
         }
 
         @Override
         public void write(Set<T> o){
             writeObject(join(STATUS_FOLDER, this.s), (TreeSet<T>) o);
         }
+
+        @Override
+        public void clean(){ write(new TreeSet<>()); }
     }
 
     static StatusTypeString HEAD = new StatusTypeString("HEAD");
     static StatusTypeSet<String> addList = new StatusTypeSet<>("addList");
     static StatusTypeSet<String> removedList = new StatusTypeSet<>("removedList");
     static void init(){
-        HEAD.write("");
-        addList.write(new TreeSet<>());
+        HEAD.clean();
+        addList.clean();
+        removedList.clean();
     }
 }
