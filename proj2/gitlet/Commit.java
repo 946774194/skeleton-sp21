@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static gitlet.Utils.*;
 import static gitlet.Capers.OBJECT_FOLDER;
@@ -42,7 +43,14 @@ public class Commit implements Serializable {
         dir.mkdirs();
         File file = join(dir, sha1.substring(2));
         writeObject(file, this);
-        Stage.saveStage(sha1);
+
+        Set<String> set = Status.commitList.get();
+        set.add(sha1);
+        Status.commitList.write(set);
+
+        Map<String, String> m = Status.branches.get();
+        m.put(Status.curBranch.get(), sha1);
+        Status.branches.write(m);
         return this;
     }
     Commit setMap(Map<String, String> map){

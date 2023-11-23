@@ -13,14 +13,21 @@ public class Main {
         validateArgs(args);
         switch(args[0]) {
             case "init":
-                Capers.init();
-                break;
+                Capers.init();break;
             case "add":
-                Capers.add(args[1]);
-                break;
+                Capers.add(args[1]);break;
             case "commit":
-                Capers.commit(args[1]);
-                break;
+                Capers.commit(args[1]);break;
+            case "rm":
+                Capers.rm(args[1]);break;
+            case "log":
+                Capers.log();break;
+            case "global-log":
+                Capers.globalLog();break;
+            case "find":
+                Capers.find(args[1]);break;
+            case "status":
+                Capers.status();break;
         }
     }
 
@@ -31,10 +38,10 @@ public class Main {
         String cmd = args[0];
         int n = args.length;
         switch (cmd){
-            case "init":
+            case "init", "log", "global-log", "status":
                 if(n != 1){ exitWithMsg("Incorrect operands."); }
                 break;
-            case "add":
+            case "add", "rm", "find":
                 if(n != 2){ exitWithMsg("Incorrect operands."); }
                 break;
             case "commit":

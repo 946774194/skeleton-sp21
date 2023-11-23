@@ -1,9 +1,6 @@
 package gitlet;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static gitlet.Capers.STATUS_FOLDER;
 import static gitlet.Utils.*;
@@ -35,23 +32,23 @@ public class Status {
         public void clean(){write("");}
     }
 
-    static class StatusTypeList<T> implements StatusType<List<T>>{
+    static class StatusTypeMap<T> implements StatusType<Map<T, String>>{
         private final String s;
-        StatusTypeList(String str){ s = str; }
+        StatusTypeMap(String str){ s = str; }
 
         @Override
         @SuppressWarnings("unchecked")
-        public List<T> get(){
-            return (List<T>) readObject(join(STATUS_FOLDER, this.s), ArrayList.class);
+        public Map<T, String> get(){
+            return (Map<T, String>) readObject(join(STATUS_FOLDER, this.s), HashMap.class);
         }
 
         @Override
-        public void write(List<T> o){
-            writeObject(join(STATUS_FOLDER, this.s), (ArrayList<T>) o);
+        public void write(Map<T, String> o){
+            writeObject(join(STATUS_FOLDER, this.s), (HashMap<T, String>) o);
         }
 
         @Override
-        public void clean(){write(new ArrayList<>());}
+        public void clean(){write(new HashMap<>());}
     }
 
     static class StatusTypeSet<T> implements StatusType<Set<T>>{
@@ -74,11 +71,17 @@ public class Status {
     }
 
     static StatusTypeString HEAD = new StatusTypeString("HEAD");
+    static StatusTypeString curBranch = new StatusTypeString("curBranch");
     static StatusTypeSet<String> addList = new StatusTypeSet<>("addList");
     static StatusTypeSet<String> removedList = new StatusTypeSet<>("removedList");
+    static StatusTypeSet<String> commitList = new StatusTypeSet<>("commitList");
+    static StatusTypeMap<String> branches = new StatusTypeMap<>("branches");
     static void init(){
         HEAD.clean();
+        curBranch.clean();
         addList.clean();
         removedList.clean();
+        commitList.clean();
+        branches.clean();
     }
 }
